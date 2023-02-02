@@ -54,6 +54,12 @@ def is_video_bad_by_url():
     except Exception as e:
         data =  str(e)
         status_code = 400
+        response = app.response_class(
+            response=json.dumps({"is_bad":False,"error":data}),
+            status=status_code,
+            mimetype='application/json'
+        )
+        return response
     # info = get_yt_video_info(video_url)
     
     if data is None:
@@ -100,7 +106,7 @@ def is_channel_bad_by_url():
     # except Exception as e:
     #     return str(e), 400
     if data is not None:
-        if data != {"owner": "Unknown", "actions": "Unknown"}:
+        if data != {"owner": "Unknown", "actions": "Unknown"} and data != "Wrong variables(channel_url)":
             is_bad = True
     response = app.response_class(
         response=json.dumps({"is_bad":is_bad,"data":data}),
